@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
+import "../App.css";
 import React from 'react'
 
 function ArtistView() {
@@ -10,7 +11,10 @@ function ArtistView() {
     const { id } = useParams()
     const [ artistData, setArtistData ] = useState([])
 
+    const justAlbums = artistData.filter(entry => entry.collectionType === 'Album')
+
     useEffect(() => {
+        debugger
         const API_URL = `http://localhost:4000/album/${id}`
         const fetchData = async () => {
             const response = await fetch(API_URL)
@@ -20,11 +24,12 @@ function ArtistView() {
         fetchData()
     }, [id])
 
-    const justAlbums = artistData.filter(entry => entry.collectionType === 'Album')
+    
 
     const renderAlbums = justAlbums.map((album, i) => {
+        debugger
         return (
-            <div key = {id} > 
+            <div key = {i} > 
                 <Link to={`/album/${album.collectionId}`}>
                     <p>{album.collectionName}</p>
                 </Link>
@@ -36,22 +41,22 @@ function ArtistView() {
         return(
             <div>
                 <button onClick ={() => navigate (-1)}>Back</button> 
+                |
                 <button onClick ={() => navigate('/')}>Home</button>
             </div>
         )
     }
     return (
         <div>
-            {artistData.length > 0 ? <h2>{artistData[0].artistName}</h2> : <h2>Waiting</h2>}
+            {artistData.length > 0 ? <h2>{artistData[0].artistName}</h2> : <h2>Loading...</h2>}
             {navButtons ()}
+            <h2>The id passes was: {id}</h2>
+
             {renderAlbums}
         </div>
     )
     
     
 }
-
-
-
 
 export default ArtistView;
